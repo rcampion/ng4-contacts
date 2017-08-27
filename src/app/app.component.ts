@@ -1,16 +1,18 @@
 import {Component} from '@angular/core';
+import {Router} from '@angular/router';
+
+import {HmacHttpClient} from './utils/hmac-http-client';
 import {LoginService} from '../services/login.service';
 import {AccountEventsService} from '../services/account.events.service';
-import {HmacHttpClient} from './utils/hmac-http-client';
-import {Router} from '@angular/router';
 import {ContactService} from '../services/contacts.service';
 import {GroupService} from '../services/groups.service';
+import {IsAuthorizedDirective} from '../app/utils/is-authorized.directive';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [ContactService, GroupService, AccountEventsService, LoginService, HmacHttpClient]
+  providers: [ContactService, GroupService, HmacHttpClient]
 })
 export class AppComponent {
   loginService: LoginService;

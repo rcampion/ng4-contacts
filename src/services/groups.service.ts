@@ -5,6 +5,7 @@ import * as Rx from 'rxjs/Rx';
 import { webServiceEndpoint } from '../app/common/constants';
 import { Group } from '../models/group';
 import { PaginationPage, PaginationPropertySort } from '../app/common/pagination';
+import {HmacHttpClient} from '../app/utils/hmac-http-client';
 
 class ServerObj {
   constructor(public resource: any) {
@@ -119,10 +120,18 @@ export class GroupService {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const test = webServiceEndpoint + '/group/member/' + groupId + '/' + contactId;
-    return this.httpService.post(webServiceEndpoint + '/group/member/' + groupId + '/' + contactId,
-      {
-        headers: headers
-      });
+//    return this.httpService.post(webServiceEndpoint + '/group/member/' + groupId + '/' + contactId,
+//      {
+//        headers: headers
+//      });
+
+      return this.httpService.post(webServiceEndpoint + '/group/member/' + groupId + '/' + contactId,
+        {
+          headers: headers
+        })
+        .map((data) => {
+          return data;
+        });
   }
 
   removeGroup(id: string) {

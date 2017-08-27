@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Http, Response, RequestOptionsArgs, Headers, RequestOptions, ConnectionBackend} from '@angular/http';
+import {HttpModule, Http, Response, RequestOptionsArgs, Headers, RequestOptions, ConnectionBackend} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {SecurityToken} from '../../models/securityToken';
 import * as AppUtils from './app.utils';
@@ -35,7 +35,8 @@ export class HmacHttpClient extends Http {
         message = method + url + date;
       }
       options.headers.set(AppUtils.CSRF_CLAIM_HEADER, localStorage.getItem(AppUtils.CSRF_CLAIM_HEADER));
-
+      // rkc set this as default
+      options.headers.set(AppUtils.HEADER_X_DIGEST, CryptoJS.HmacSHA256(message, secret).toString());
       if (securityToken.isEncoding('HmacSHA256')) {
         options.headers.set(AppUtils.HEADER_X_DIGEST, CryptoJS.HmacSHA256(message, secret).toString());
       } else if (securityToken.isEncoding('HmacSHA1')) {

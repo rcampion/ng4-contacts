@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
-import { Http, Response, RequestOptions, Headers, URLSearchParams } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import {Injectable} from '@angular/core';
+import {Http, HttpModule, Response, RequestOptions, Headers, URLSearchParams} from '@angular/http';
+import {Observable} from 'rxjs/Rx';
 import * as Rx from 'rxjs/Rx';
-import { webServiceEndpoint } from '../app/common/constants';
-import { Contact } from '../models/contact';
-import { PaginationPage, PaginationPropertySort } from '../app/common/pagination';
+import {webServiceEndpoint} from '../app/common/constants';
+import {Contact} from '../models/contact';
+import {PaginationPage, PaginationPropertySort} from '../app/common/pagination';
+import {HmacHttpClient} from '../app/utils/hmac-http-client';
 
 class ServerObj {
   constructor(public resource: any) {
@@ -14,18 +15,18 @@ class ServerObj {
 @Injectable()
 export class ContactService {
 
-  constructor(private httpService: Http) {
-
+constructor(private httpService: Http) {
+// constructor(private httpService: HmacHttpClient) {
   };
 
   findContacts(page: number, pageSize: number, sort: PaginationPropertySort): Rx.Observable<any> {
-    const params: any = { page: page, size: pageSize, headers: this.getHeaders() };
+    const params: any = {page: page, size: pageSize, headers: this.getHeaders()};
     if (sort != null) {
       params.sort = sort.property + ',' + sort.direction;
     }
     return <Rx.Observable<PaginationPage<any>>>Rx.Observable.fromPromise(
       this.httpService
-        .get(webServiceEndpoint + '/contact', { search: params })
+        .get(webServiceEndpoint + '/contact', {search: params})
         .map(res => res.json())
         .toPromise()
     ).publish().refCount();
@@ -33,13 +34,13 @@ export class ContactService {
 
   searchContacts(name: string, page: number, pageSize: number, sort: PaginationPropertySort): Rx.Observable<any> {
 
-    const params: any = { size: pageSize, page: page };
+    const params: any = {size: pageSize, page: page};
     if (sort != null) {
       params.sort = sort.property + ',' + sort.direction;
     }
     return <Rx.Observable<PaginationPage<any>>>Rx.Observable.fromPromise(
       this.httpService
-        .get(webServiceEndpoint + '/contact/search/' + name, { search: params })
+        .get(webServiceEndpoint + '/contact/search/' + name, {search: params})
         .map(res => res.json())
         .toPromise()
     ).publish().refCount();
@@ -47,7 +48,7 @@ export class ContactService {
 
   query(params?: URLSearchParams): Observable<Contact[]> {
     return this.httpService
-      .get(webServiceEndpoint, { search: params })
+      .get(webServiceEndpoint, {search: params})
       .map((response) => {
         const result: any = response.json();
         const contacts: Array<Contact> = [];
@@ -72,7 +73,7 @@ export class ContactService {
 
   get(id: number): Observable<Contact> {
     const contact$ = this.httpService
-      .get(`${webServiceEndpoint}/contact/${id}`, { headers: this.getHeaders() })
+      .get(`${webServiceEndpoint}/contact/${id}`, {headers: this.getHeaders()})
       .map(mapContact);
     return contact$;
   };

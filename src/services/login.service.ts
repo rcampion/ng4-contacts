@@ -9,6 +9,7 @@ import { Authority } from '../models/authority';
 import { Observable } from 'rxjs/Observable';
 import * as AppUtils from '../app/utils/app.utils';
 import { Router } from '@angular/router';
+import {HmacHttpClient} from '../app/utils/hmac-http-client';
 
 @Injectable()
 export class LoginService {
