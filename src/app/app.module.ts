@@ -59,7 +59,7 @@ import {TableSort} from './table/table';
     UtilsModule
   ],
   providers: [
-    LoginService, AccountEventsService,
+    LoginService, AccountEventsService, Http,
     {
       provide: Http,
       useFactory: hmacHttpClient,

@@ -36,7 +36,7 @@ export class HmacHttpClient extends Http {
       }
       options.headers.set(AppUtils.CSRF_CLAIM_HEADER, localStorage.getItem(AppUtils.CSRF_CLAIM_HEADER));
       // rkc set this as default
-      options.headers.set(AppUtils.HEADER_X_DIGEST, CryptoJS.HmacSHA256(message, secret).toString());
+      // options.headers.set(AppUtils.HEADER_X_DIGEST, CryptoJS.HmacSHA256(message, secret).toString());
       if (securityToken.isEncoding('HmacSHA256')) {
         options.headers.set(AppUtils.HEADER_X_DIGEST, CryptoJS.HmacSHA256(message, secret).toString());
       } else if (securityToken.isEncoding('HmacSHA1')) {
