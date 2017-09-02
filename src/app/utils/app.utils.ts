@@ -14,8 +14,8 @@ export const STORAGE_SECURITY_TOKEN = 'hmacApp-security';
 // Common http root api
 export const BACKEND_API_PATH = '/ng4-contacts-server/api';
 export const BACKEND_API_AUTHENTICATE_PATH = '/authenticate';
-// export const BACKEND_API_ROOT_URL = 'http://localhost:8080' + BACKEND_API_PATH;
-export const BACKEND_API_ROOT_URL: string = 'https://www.zdslogic.com' + BACKEND_API_PATH;
+export const BACKEND_API_ROOT_URL = 'http://localhost:8080' + BACKEND_API_PATH;
+// export const BACKEND_API_ROOT_URL: string = 'https://www.zdslogic.com' + BACKEND_API_PATH;
 
 export class UrlMatcher {
     public static matches(url: string): boolean {

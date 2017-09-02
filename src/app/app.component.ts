@@ -27,7 +27,12 @@ export class AppComponent {
           self.logout();
         }
       }
-      if ((e.url !== '/authenticate') && (e.url !== '/home') && (e.url !== '/about')) {
+      if ((e.url !== '/authenticate')
+        && (e.url !== '/home')
+        && (e.url !== '/about')
+        && (e.url !== '/parent')
+        && (e.url !== '/sibling')
+      ) {
         if (!loginService.isAuthenticated()) {
           router.navigate(['/authenticate']);
         } else {

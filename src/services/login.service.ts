@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
-import { Response, Headers, Http } from '@angular/http';
+import {Injectable} from '@angular/core';
+import {Response, Headers, Http} from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import { Account } from '../models/account';
-import { AccountEventsService } from '../services/account.events.service';
-import { SecurityToken } from '../models/securityToken';
-import { Authority } from '../models/authority';
-import { Observable } from 'rxjs/Observable';
+import {Account} from '../models/account';
+import {AccountEventsService} from '../services/account.events.service';
+import {SecurityToken} from '../models/securityToken';
+import {Authority} from '../models/authority';
+import {Observable} from 'rxjs/Observable';
 import * as AppUtils from '../app/utils/app.utils';
-import { Router } from '@angular/router';
-import {HmacHttpClient} from '../app/utils/hmac-http-client';
+import {Router} from '@angular/router';
+// import {HmacHttpClient} from '../app/utils/hmac-http-client';
 
 @Injectable()
 export class LoginService {
@@ -21,7 +21,7 @@ export class LoginService {
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
 
-    return this.http.post(AppUtils.BACKEND_API_ROOT_URL + AppUtils.BACKEND_API_AUTHENTICATE_PATH, JSON.stringify({ login: username, password: password }), { headers: headers })
+    return this.http.post(AppUtils.BACKEND_API_ROOT_URL + AppUtils.BACKEND_API_AUTHENTICATE_PATH, JSON.stringify({login: username, password: password}), {headers: headers})
       .catch((error: any) => {
         if (error.status === 401) {
           return Observable.throw('Unauthorized');
@@ -48,20 +48,6 @@ export class LoginService {
       })
 
       ;
-  }
-
-  private handleError(error: Response | any) {
-    // In a real world app, you might use a remote logging infrastructure
-    let errMsg: string;
-    if (error instanceof Response) {
-      const body = error.json() || '';
-      const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    } else {
-      errMsg = error.message ? error.message : error.toString();
-    }
-    console.error(errMsg);
-    return Observable.throw(errMsg);
   }
 
   sendLoginSuccess(account?: Account): void {

@@ -13,6 +13,10 @@
 		<li class="nav-item"><a class="nav-link" routerLink="contacts">Contacts</a></li>
 		<li class="nav-item"><a class="nav-link" routerLink="groups">Groups</a></li>
 		<li class="nav-item"><a class="nav-link" routerLink="users">Users</a></li>
+<!--  	
+		<li class="nav-item"><a class="nav-link" routerLink="parent">Parent</a></li>
+		<li class="nav-item"><a class="nav-link" routerLink="sibling">Sibling</a></li>
+-->			
 		<li *ngIf="!loginService.isAuthenticated()" class="nav-item"><a
 			class="nav-link" routerLink="login">Login</a></li>
 		<li *ngIf="loginService.isAuthenticated()" class="nav-item"><a
@@ -22,3 +26,5 @@
 </nav>
 
 <router-outlet></router-outlet>
+
+<app-error></app-error>

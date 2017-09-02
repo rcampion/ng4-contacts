@@ -6,8 +6,11 @@ import {ContactComponent} from './app/contact/contact.component';
 import {GroupListComponent} from './app/group-list/group-list.component';
 import {GroupComponent} from './app/group/group.component';
 import {LoginComponent} from './app/login/login.component';
+import {ErrorComponent} from './app/error/error.component';
 import {Users} from './app/users/users';
 import {User} from './app/users/user';
+import {ParentComponent} from './app/parent/parent.component';
+import {SiblingComponent} from './app/sibling/sibling.component';
 
 // Route config let's you map routes to components
 const routes: Routes = [
@@ -59,6 +62,21 @@ const routes: Routes = [
   {
     path: 'group',
     component: GroupComponent
+  },
+  // map '/error' to error component
+  {
+    path: 'error',
+    component: ErrorComponent
+  },
+
+  {
+    path: 'parent',
+    component: ParentComponent
+  },
+
+  {
+    path: 'sibling',
+    component: SiblingComponent
   }
 
   /* ,

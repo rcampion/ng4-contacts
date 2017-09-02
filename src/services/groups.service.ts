@@ -7,10 +7,12 @@ import { Group } from '../models/group';
 import { PaginationPage, PaginationPropertySort } from '../app/common/pagination';
 import {HmacHttpClient} from '../app/utils/hmac-http-client';
 
+/*
 class ServerObj {
   constructor(public resource: any) {
   }
 };
+*/
 
 @Injectable()
 export class GroupService {

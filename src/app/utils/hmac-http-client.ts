@@ -4,6 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import {SecurityToken} from '../../models/securityToken';
 import * as AppUtils from './app.utils';
 import {AccountEventsService} from '../../services/account.events.service';
+import {ErrorService} from '../../services/error.service';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/share';
@@ -16,11 +17,14 @@ import * as CryptoJS from 'crypto-js';
 export class HmacHttpClient extends Http {
   http: Http;
   accountEventsService: AccountEventsService;
-  constructor(_backend: ConnectionBackend, _defaultOptions: RequestOptions, accountEventsService: AccountEventsService) {
+  errorService: ErrorService;
+  constructor(_backend: ConnectionBackend, _defaultOptions: RequestOptions, accountEventsService: AccountEventsService, errorService: ErrorService) {
     super(_backend, _defaultOptions);
     this.accountEventsService = accountEventsService;
+    this.errorService = errorService;
   }
   addSecurityHeader(url: string, method: string, options: RequestOptionsArgs, body: any): void {
+    this.errorService.changeMessage('');
 
     if (AppUtils.UrlMatcher.matches(url)) {
 
@@ -76,11 +80,15 @@ export class HmacHttpClient extends Http {
     if (res.status === 401) {
       console.log('Unauthorized request:', res.text());
       this.accountEventsService.logout({error: res.text()});
+      //      this.errorService.handleError(res);
+      this.errorService.changeMessage('Unauthorized request: ' + res.text());
     }
 
     if (res.status === 403) {
       console.log('Unauthorized request:', res.text());
       this.accountEventsService.logout({error: res.text()});
+      //      this.errorService.handleError(res);
+      this.errorService.changeMessage('Unauthorized request: ' + res.text());
     }
     observer.complete();
   }

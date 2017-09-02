@@ -14,23 +14,27 @@ import {GroupMembersComponent} from './group-members/group-members.component';
 import {GroupMemberSelectorComponent} from './group-member-selector/group-member-selector.component';
 import {Users} from './users/users';
 import {User} from './users/user';
-
+import {ErrorComponent} from './error/error.component';
 // import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {LoginService} from '../services/login.service';
+
 // import {ContactService} from '../services/contacts.service';
 // import {GroupService} from '../services/groups.service';
 import {AccountEventsService} from '../services/account.events.service';
+import {ErrorService} from '../services/error.service';
 
 // import * as AppUtils from './utils/app.utils';
 // import { IsAuthorized } from '../app/utils/is-authorized.directive';
 import {UtilsModule} from '../app/utils/utils.module';
-import {HmacHttpClient} from './utils/hmac-http-client';
+import {HmacHttpClient} from '../app/utils/hmac-http-client';
 
 import {AppComponent} from './app.component';
 
 import {TablePagination} from './table/table';
 import {TableElementsCount} from './table/table';
 import {TableSort} from './table/table';
+import {ParentComponent} from './parent/parent.component';
+import {SiblingComponent} from './sibling/sibling.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +42,7 @@ import {TableSort} from './table/table';
     AboutComponent,
     HomeComponent,
     LoginComponent,
+    ErrorComponent,
     ContactComponent,
     ContactListComponent,
     GroupComponent,
@@ -48,7 +53,9 @@ import {TableSort} from './table/table';
     TablePagination,
     TableSort,
     Users,
-    User
+    User,
+    ParentComponent,
+    SiblingComponent
   ],
   imports: [
     BrowserModule,
@@ -59,33 +66,19 @@ import {TableSort} from './table/table';
     UtilsModule
   ],
   providers: [
-    LoginService, AccountEventsService, Http,
+    LoginService, AccountEventsService, Http, ErrorService,
     {
       provide: Http,
       useFactory: hmacHttpClient,
-      deps: [XHRBackend, RequestOptions, AccountEventsService],
+      deps: [XHRBackend, RequestOptions, AccountEventsService, ErrorService],
       multi: false
     }],
-  /*
-    providers: [
-      {
-        provide: Http,
-        useFactory: (xhrBackend: XHRBackend, requestOptions: RequestOptions, accountEventService: AccountEventsService) => {
-          return new HmacHttpClient(xhrBackend, requestOptions, accountEventService);
-        },
-        deps: [XHRBackend, RequestOptions, AccountEventsService],
-        multi: false
-      }]
-    ,
-  */
-  bootstrap: [AppComponent]
+
+  bootstrap: [AppComponent, ErrorComponent]
 })
 export class AppModule {}
 
-export function myHttpClient(xhrBackend: XHRBackend, requestOptions: RequestOptions, accountEventService: AccountEventsService) {
-  return new HmacHttpClient(xhrBackend, requestOptions, accountEventService);
+export function hmacHttpClient(xhrBackend: XHRBackend, requestOptions: RequestOptions, accountEventService: AccountEventsService, errorService: ErrorService) {
+  return new HmacHttpClient(xhrBackend, requestOptions, accountEventService, errorService);
 };
 
-export function hmacHttpClient(xhrBackend: XHRBackend, requestOptions: RequestOptions, accountEventService: AccountEventsService) {
-  return new HmacHttpClient(xhrBackend, requestOptions, accountEventService);
-};
