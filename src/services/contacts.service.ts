@@ -90,7 +90,14 @@ constructor(private httpService: Http) {
       })
         .map((data) => {
           return data;
-        });
+        })
+      .catch((error: any) => {
+        if (error.status === 403) {
+          handleError(error);
+          return Observable.throw('Unauthorized request!');
+        }
+        // do any other checking for statuses here
+      });
     } else {
       return this.httpService.post(webServiceEndpoint + '/contact/', contactToJson(contact),
         {
@@ -98,7 +105,14 @@ constructor(private httpService: Http) {
         })
         .map((data) => {
           return data;
-        });
+        })
+      .catch((error: any) => {
+        if (error.status === 403) {
+          handleError(error);
+          return Observable.throw('Unauthorized request!');
+        }
+        // do any other checking for statuses here
+      });
     }
   }
 
@@ -108,7 +122,14 @@ constructor(private httpService: Http) {
       .map((response) => {
         const result: any = response.json();
         return result.id;
-      });
+      })
+      .catch((error: any) => {
+        if (error.status === 403) {
+          handleError(error);
+          return Observable.throw('Unauthorized');
+        }
+        // do any other checking for statuses here
+      })
   }
 
   private getHeaders() {
@@ -152,9 +173,9 @@ function mapContact(response: Response): Contact {
 function handleError(error: any) {
   // log error
   // could be something more sophisticated
-  const errorMsg = error.message || `Yikes! There was was a problem and we couldn't retrieve your data!`;
+  const errorMsg = error.message || `Yikes! There was was a problem and we couldn't process the request!`;
   console.error(errorMsg);
-
+  alert(errorMsg);
   // throw an application level error
   return Observable.throw(errorMsg);
 }

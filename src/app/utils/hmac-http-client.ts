@@ -28,7 +28,9 @@ export class HmacHttpClient extends Http {
 
     if (AppUtils.UrlMatcher.matches(url)) {
 
-      const securityToken: SecurityToken = new SecurityToken(JSON.parse(localStorage.getItem(AppUtils.STORAGE_SECURITY_TOKEN)));
+      // const securityToken: SecurityToken = new SecurityToken(JSON.parse(localStorage.getItem(AppUtils.STORAGE_SECURITY_TOKEN)));
+      const securityToken: SecurityToken = new SecurityToken(JSON.parse(this.getFromStorage(AppUtils.STORAGE_SECURITY_TOKEN)));
+
       const date: string = new Date().toISOString();
       const secret: string = securityToken.publicSecret;
 
@@ -68,9 +70,11 @@ export class HmacHttpClient extends Http {
   }
   mapResponse(res: Response, observer: Observer<Response>): void {
     if (res.ok && res.headers) {
-      const securityToken: SecurityToken = new SecurityToken(JSON.parse(localStorage.getItem(AppUtils.STORAGE_SECURITY_TOKEN)));
+      // const securityToken: SecurityToken = new SecurityToken(JSON.parse(localStorage.getItem(AppUtils.STORAGE_SECURITY_TOKEN)));
+     const securityToken: SecurityToken = new SecurityToken(JSON.parse(this.getFromStorage(AppUtils.STORAGE_SECURITY_TOKEN)));
       if (securityToken) {
-        localStorage.setItem(AppUtils.STORAGE_SECURITY_TOKEN, JSON.stringify(securityToken));
+        // localStorage.setItem(AppUtils.STORAGE_SECURITY_TOKEN, JSON.stringify(securityToken));
+        this.setToStorage(AppUtils.STORAGE_SECURITY_TOKEN, securityToken);
       }
     }
     observer.next(res);
@@ -80,15 +84,18 @@ export class HmacHttpClient extends Http {
     if (res.status === 401) {
       console.log('Unauthorized request:', res.text());
       this.accountEventsService.logout({error: res.text()});
-      //      this.errorService.handleError(res);
+      // this.errorService.handleError(res);
       this.errorService.changeMessage('Unauthorized request: ' + res.text());
+      // return Observable.throw('Unauthorized');
     }
 
     if (res.status === 403) {
-      console.log('Unauthorized request:', res.text());
+      const errorMsg = 'Unauthorized request!' ;
+      console.log(errorMsg  + res.text());
       this.accountEventsService.logout({error: res.text()});
-      //      this.errorService.handleError(res);
-      this.errorService.changeMessage('Unauthorized request: ' + res.text());
+      // this.errorService.handleError(res);
+      alert(errorMsg);
+      this.errorService.changeMessage(errorMsg);
     }
     observer.complete();
   }
@@ -130,5 +137,33 @@ export class HmacHttpClient extends Http {
           this.catchResponse(res, observer);
         });
     });
+  }
+  delete(url: string, body: string, options?: RequestOptionsArgs): Observable<Response> {
+    options = this.setOptions(options);
+    this.addSecurityHeader(url, 'DELETE', options, body);
+
+    return Observable.create((observer: Observer<Response>) => {
+      super.delete(url, options)
+        .subscribe((res: Response) => {
+          this.mapResponse(res, observer);
+        }, (res: Response) => {
+          this.catchResponse(res, observer);
+        });
+    });
+  }
+  private setToStorage(key: string, value: any): void {
+    const elem: any = localStorage.getItem(key);
+    if (!elem) {
+      sessionStorage.setItem(key, JSON.stringify(value));
+    } else {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+  }
+  private getFromStorage(key: string): any {
+    const elem: any = localStorage.getItem(key);
+    if (!elem) {
+      return sessionStorage.getItem(key);
+    }
+    return elem;
   }
 }
