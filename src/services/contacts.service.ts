@@ -34,6 +34,19 @@ constructor(private httpService: Http) {
     ).publish().refCount();
   };
 
+  findFilteredContacts(page: number, pageSize: number, sort: PaginationPropertySort, groupId: string): Rx.Observable<any> {
+    const params: any = {page: page, size: pageSize, headers: this.getHeaders()};
+    if (sort != null) {
+      params.sort = sort.property + ',' + sort.direction;
+    }
+    return <Rx.Observable<PaginationPage<any>>>Rx.Observable.fromPromise(
+      this.httpService
+        .get(webServiceEndpoint + '/contact/group/' + groupId, {search: params})
+        .map(res => res.json())
+        .toPromise()
+    ).publish().refCount();
+  };
+
   searchContacts(name: string, page: number, pageSize: number, sort: PaginationPropertySort): Rx.Observable<any> {
 
     const params: any = {size: pageSize, page: page};

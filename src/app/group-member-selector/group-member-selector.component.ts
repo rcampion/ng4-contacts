@@ -39,7 +39,7 @@ export class GroupMemberSelectorComponent implements Table {
 
   fetchPage(pageNumber: number, pageSize: number, sort: PaginationPropertySort): Rx.Observable<PaginationPage<any>> {
     this.pageNumber = pageNumber;
-    const observable: Rx.Observable<PaginationPage<any>> = this.contactService.findContacts(pageNumber, pageSize, sort);
+    const observable: Rx.Observable<PaginationPage<any>> = this.contactService.findFilteredContacts(pageNumber, pageSize, sort, this.groupId);
     observable.subscribe(groupMemberSelectionPage => this.groupMemberSelectionPage = groupMemberSelectionPage);
     return observable;
   }

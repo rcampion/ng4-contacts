@@ -34,45 +34,12 @@
 		</form>
 	</div>
 </div>
-
-<!--  
-<div class="panel panel-default" *ngIf="group.id">
-  <div class="panel-heading text-center">
-    <h3>Groups</h3>
-  </div>
-  <div class="panel-body">
-    <table class="table">
-      <tr>
-        <td>
-          <select class="form-control" [(ngModel)]="selectedGroupId" placeholder="Select group">
-            <option *ngFor="#group of remainingGroups" [value]="group.id">
-              {{ group.name }}
-            </option>
-          </select>
-        </td>
-        <td>
-          <button type="button" class="fa fa-plus btn btn-primary pull-right" (click)="addSelectedGroup()" (disabled)="!selectedGroupId">
-          </button>
-        </td>
-      </tr>
-      <tr *ngFor="#groupGroup of groupGroups">
-        <td>{{ groupGroup.group.name }}</td>
-        <td>            
-          <button type="button" class="fa fa-trash btn btn-danger pull-right" (click)="removeGroup(groupGroup)">
-          </button>
-        </td>
-      </tr>
-    </table>
-  </div>
-</div>
--->
  
-<!--
-<div *ngIf="group.id">
--->
+<div *ngIf="group.groupId">
+
   <app-group-members></app-group-members>
-<!--  
+ 
 </div>
--->
+
 
 
