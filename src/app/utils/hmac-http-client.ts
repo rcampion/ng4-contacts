@@ -85,7 +85,7 @@ export class HmacHttpClient extends Http {
       console.log('Unauthorized request:', res.text());
       this.accountEventsService.logout({error: res.text()});
       // this.errorService.handleError(res);
-      this.errorService.changeMessage('Unauthorized request: ' + res.text());
+      this.errorService.changeMessage('Unauthorized request!');
       // return Observable.throw('Unauthorized');
     }
 
