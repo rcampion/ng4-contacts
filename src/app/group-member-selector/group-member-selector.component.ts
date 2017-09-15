@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, Input, ViewChildren} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as Rx from 'rxjs/Rx';
 import {webServiceEndpoint, defaultItemsCountPerPage} from '../common/constants';
@@ -27,8 +27,16 @@ export class GroupMemberSelectorComponent implements Table {
   groupId: string;
   contactId: string;
 
+<<<<<<< HEAD
   //  constructor(private contactService: ContactService, private groupService: GroupService, @Inject(Router) private router: Router, @Inject(GroupMembersComponent) private groupMembersComponent: GroupMembersComponent, private route: ActivatedRoute) {}
   constructor(private contactService: ContactService, private groupService: GroupService, @Inject(Router) private router: Router, private route: ActivatedRoute) {}
+=======
+  //  @Input() groupMemberComponent: GroupMembersComponent;
+  // @ViewChildren(GroupMembersComponent)
+  //  private groupMembersComponent: GroupMembersComponent;
+
+    constructor(private contactService: ContactService, private groupService: GroupService, @Inject(Router) private router: Router, @Inject(GroupMembersComponent) private groupMembersComponent: GroupMembersComponent, private route: ActivatedRoute) {}
+>>>>>>> branch 'master' of https://github.com/rcampion/ng4-contacts.git
 
   ngOnInit() {
     this.groupId = this.route.snapshot.params['id'];
@@ -74,9 +82,18 @@ export class GroupMemberSelectorComponent implements Table {
 
     this.groupService.addGroupMember(this.groupId, this.contactId).subscribe();
 
+<<<<<<< HEAD
 //    this.groupMembersComponent.update();
 
     this.update();
+=======
+    const observable: Rx.Observable<PaginationPage<any>> = this.fetchPage(0, defaultItemsCountPerPage, null);
+    showLoading();
+    observable.subscribe(() => {
+    }, hideLoading, hideLoading);
+
+    this.groupMembersComponent.update();
+>>>>>>> branch 'master' of https://github.com/rcampion/ng4-contacts.git
 
   }
 
