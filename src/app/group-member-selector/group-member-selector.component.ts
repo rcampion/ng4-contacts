@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, Input, ViewChildren} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as Rx from 'rxjs/Rx';
 import {webServiceEndpoint, defaultItemsCountPerPage} from '../common/constants';
@@ -10,6 +10,7 @@ import {Contact} from '../../models/contact';
 import {ContactService} from '../../services/contacts.service';
 import {GroupService} from '../../services/groups.service';
 import {BaseHttpService} from '../../services/base-http.service';
+import {GroupMembersComponent} from '../group-members/group-members.component';
 
 @Component({
   selector: 'app-group-member-selector',
@@ -26,7 +27,11 @@ export class GroupMemberSelectorComponent implements Table {
   groupId: string;
   contactId: string;
 
-  constructor(private contactService: ContactService, private groupService: GroupService, @Inject(Router) private router: Router, private route: ActivatedRoute) {}
+  //  @Input() groupMemberComponent: GroupMembersComponent;
+  // @ViewChildren(GroupMembersComponent)
+  //  private groupMembersComponent: GroupMembersComponent;
+
+    constructor(private contactService: ContactService, private groupService: GroupService, @Inject(Router) private router: Router, @Inject(GroupMembersComponent) private groupMembersComponent: GroupMembersComponent, private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.groupId = this.route.snapshot.params['id'];
@@ -65,7 +70,13 @@ export class GroupMemberSelectorComponent implements Table {
 
     this.groupService.addGroupMember(this.groupId, this.contactId).subscribe();
 
-    //    window.location.reload();
+    const observable: Rx.Observable<PaginationPage<any>> = this.fetchPage(0, defaultItemsCountPerPage, null);
+    showLoading();
+    observable.subscribe(() => {
+    }, hideLoading, hideLoading);
+
+    this.groupMembersComponent.update();
+
   }
 
 }

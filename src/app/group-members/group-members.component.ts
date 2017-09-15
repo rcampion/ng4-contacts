@@ -39,6 +39,13 @@ export class GroupMembersComponent implements Table {
 
   }
 
+  update() {
+    const observable: Rx.Observable<PaginationPage<any>> = this.fetchPage(this.pageNumber, defaultItemsCountPerPage, null);
+    showLoading();
+    observable.subscribe(() => {
+    }, hideLoading, hideLoading);
+  }
+
   fetchPage(pageNumber: number, pageSize: number, sort: PaginationPropertySort): Rx.Observable<PaginationPage<any>> {
     this.pageNumber = pageNumber;
     const observable: Rx.Observable<PaginationPage<any>> = this.groupService.findGroupMembers(this.groupId, pageNumber, pageSize, sort);
