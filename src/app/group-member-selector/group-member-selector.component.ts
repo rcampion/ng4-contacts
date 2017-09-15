@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, Input, ViewChildren} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as Rx from 'rxjs/Rx';
 import {webServiceEndpoint, defaultItemsCountPerPage} from '../common/constants';
@@ -26,6 +26,7 @@ export class GroupMemberSelectorComponent implements Table {
 
   groupId: string;
   contactId: string;
+
 
   //  constructor(private contactService: ContactService, private groupService: GroupService, @Inject(Router) private router: Router, @Inject(GroupMembersComponent) private groupMembersComponent: GroupMembersComponent, private route: ActivatedRoute) {}
   constructor(private contactService: ContactService, private groupService: GroupService, @Inject(Router) private router: Router, private route: ActivatedRoute) {}
@@ -74,9 +75,12 @@ export class GroupMemberSelectorComponent implements Table {
 
     this.groupService.addGroupMember(this.groupId, this.contactId).subscribe();
 
-//    this.groupMembersComponent.update();
+    const observable: Rx.Observable<PaginationPage<any>> = this.fetchPage(0, defaultItemsCountPerPage, null);
+    showLoading();
+    observable.subscribe(() => {
+    }, hideLoading, hideLoading);
 
-    this.update();
+    // this.groupMembersComponent.update();
 
   }
 
