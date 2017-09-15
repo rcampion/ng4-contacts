@@ -10,6 +10,7 @@ import {Contact} from '../../models/contact';
 import {ContactService} from '../../services/contacts.service';
 import {GroupService} from '../../services/groups.service';
 import {BaseHttpService} from '../../services/base-http.service';
+import {GroupMembersComponent} from '../group-members/group-members.component';
 
 @Component({
   selector: 'app-group-member-selector',
@@ -26,6 +27,7 @@ export class GroupMemberSelectorComponent implements Table {
   groupId: string;
   contactId: string;
 
+  //  constructor(private contactService: ContactService, private groupService: GroupService, @Inject(Router) private router: Router, @Inject(GroupMembersComponent) private groupMembersComponent: GroupMembersComponent, private route: ActivatedRoute) {}
   constructor(private contactService: ContactService, private groupService: GroupService, @Inject(Router) private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit() {
@@ -35,6 +37,13 @@ export class GroupMemberSelectorComponent implements Table {
     observable.subscribe(() => {
     }, hideLoading, hideLoading);
     this.self = this;
+  }
+
+  update() {
+    const observable: Rx.Observable<PaginationPage<any>> = this.fetchPage(this.pageNumber, defaultItemsCountPerPage, null);
+    showLoading();
+    observable.subscribe(() => {
+    }, hideLoading, hideLoading);
   }
 
   fetchPage(pageNumber: number, pageSize: number, sort: PaginationPropertySort): Rx.Observable<PaginationPage<any>> {
@@ -65,7 +74,10 @@ export class GroupMemberSelectorComponent implements Table {
 
     this.groupService.addGroupMember(this.groupId, this.contactId).subscribe();
 
-    //    window.location.reload();
+//    this.groupMembersComponent.update();
+
+    this.update();
+
   }
 
 }

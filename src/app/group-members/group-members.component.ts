@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
 import * as Rx from 'rxjs/Rx';
@@ -9,6 +9,7 @@ import {showLoading, hideLoading} from '../common/loader';
 import {URLSearchParams} from '@angular/http';
 import {GroupMember} from '../../models/group-member';
 import {GroupService} from '../../services/groups.service';
+import {GroupMemberSelectorComponent} from '../group-member-selector/group-member-selector.component';
 import {BaseHttpService} from '../../services/base-http.service';
 
 @Component({
@@ -26,6 +27,9 @@ export class GroupMembersComponent implements Table {
   pageNumber: number;
   groupId: string;
 
+  @ViewChild(GroupMemberSelectorComponent)
+  private groupMemberSelectorComponent: GroupMemberSelectorComponent;
+
   constructor(private groupService: GroupService, @Inject(Router) private router: Router, private route: ActivatedRoute) {
     this.groupId = route.snapshot.params['id'];
   }
@@ -37,6 +41,13 @@ export class GroupMembersComponent implements Table {
     }, hideLoading, hideLoading);
     this.self = this;
 
+  }
+
+  update() {
+    const observable: Rx.Observable<PaginationPage<any>> = this.fetchPage(this.pageNumber, defaultItemsCountPerPage, null);
+    showLoading();
+    observable.subscribe(() => {
+    }, hideLoading, hideLoading);
   }
 
   fetchPage(pageNumber: number, pageSize: number, sort: PaginationPropertySort): Rx.Observable<PaginationPage<any>> {
@@ -58,5 +69,7 @@ export class GroupMembersComponent implements Table {
     }).subscribe(r => {
       this.fetchPage(this.pageNumber, defaultItemsCountPerPage, null);
     }, hideLoading, hideLoading);
+
+    this.groupMemberSelectorComponent.update();
   }
 }
