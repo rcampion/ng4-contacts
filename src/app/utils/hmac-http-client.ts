@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
 import {HttpModule, Http, Response, RequestOptionsArgs, Headers, RequestOptions, ConnectionBackend} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {SecurityToken} from '../../models/securityToken';
+import {Account} from '../../models/account';
 import * as AppUtils from './app.utils';
 import {AccountEventsService} from '../../services/account.events.service';
 import {ErrorService} from '../../services/error.service';
@@ -12,15 +14,19 @@ import 'rxjs/add/operator/share';
 import {Observer} from 'rxjs/Observer';
 import * as CryptoJS from 'crypto-js';
 
+// import {IsAuthorizedDirective} from './is-authorized.directive';
+
 @Injectable()
 export class HmacHttpClient extends Http {
   http: Http;
+  router: Router;
   accountEventsService: AccountEventsService;
   errorService: ErrorService;
-  constructor(_backend: ConnectionBackend, _defaultOptions: RequestOptions, accountEventsService: AccountEventsService, errorService: ErrorService) {
+  constructor(_backend: ConnectionBackend, _defaultOptions: RequestOptions, accountEventsService: AccountEventsService, errorService: ErrorService, router: Router) {
     super(_backend, _defaultOptions);
     this.accountEventsService = accountEventsService;
     this.errorService = errorService;
+    this.router = router;
   }
   addSecurityHeader(url: string, method: string, options: RequestOptionsArgs, body: any): void {
     this.errorService.changeMessage('');
@@ -88,6 +94,7 @@ export class HmacHttpClient extends Http {
 
       if (res.text() === 'No jwt cookie found') {
         errorMsg = errorMsg + ' ' + res.text();
+        this.logout(true);
       }
       alert(errorMsg);
       this.errorService.changeMessage(errorMsg);
@@ -160,5 +167,20 @@ export class HmacHttpClient extends Http {
       return sessionStorage.getItem(key);
     }
     return elem;
+  }
+
+  private logout(callServer: boolean = true): void {
+    console.log('Logging out');
+
+    if (callServer) {
+      this.get(AppUtils.BACKEND_API_ROOT_URL + '/logout').subscribe(() => {
+        this.accountEventsService.logout(new Account(JSON.parse(localStorage.getItem(AppUtils.STORAGE_ACCOUNT_TOKEN))));
+        //        this.removeAccount();
+        this.router.navigate(['/logout']);
+      });
+    } else {
+      //      this.removeAccount();
+        this.router.navigate(['/logout']);
+    }
   }
 }

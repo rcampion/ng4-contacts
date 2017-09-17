@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {UsersService} from '../../services/users.service';
 import {Account} from '../../models/account';
-import {IsAuthorizedDirective} from '../utils/is-authorized.directive';
 
 @Component({
   selector: 'users',

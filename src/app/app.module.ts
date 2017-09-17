@@ -1,5 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
+import {Router} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Http, XHRBackend, RequestOptions, HttpModule, ConnectionBackend} from '@angular/http';
 import {routing} from '../app.routes';
@@ -26,6 +27,7 @@ import {TableElementsCount} from './table/table';
 import {TableSort} from './table/table';
 import {ParentComponent} from './parent/parent.component';
 import {SiblingComponent} from './sibling/sibling.component';
+import {IsAuthorizedDirective} from '../app/utils/is-authorized.directive';
 
 @NgModule({
   declarations: [
@@ -61,7 +63,7 @@ import {SiblingComponent} from './sibling/sibling.component';
     {
       provide: Http,
       useFactory: hmacHttpClient,
-      deps: [XHRBackend, RequestOptions, AccountEventsService, ErrorService],
+      deps: [XHRBackend, RequestOptions, AccountEventsService, ErrorService, Router],
       multi: false
     }],
 
@@ -69,7 +71,7 @@ import {SiblingComponent} from './sibling/sibling.component';
 })
 export class AppModule {}
 
-export function hmacHttpClient(xhrBackend: XHRBackend, requestOptions: RequestOptions, accountEventService: AccountEventsService, errorService: ErrorService) {
-  return new HmacHttpClient(xhrBackend, requestOptions, accountEventService, errorService);
+export function hmacHttpClient(xhrBackend: XHRBackend, requestOptions: RequestOptions, accountEventService: AccountEventsService, errorService: ErrorService, router: Router) {
+  return new HmacHttpClient(xhrBackend, requestOptions, accountEventService, errorService, router);
 };
 
