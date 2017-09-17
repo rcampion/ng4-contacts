@@ -7,18 +7,10 @@ import {Contact} from '../models/contact';
 import {PaginationPage, PaginationPropertySort} from '../app/common/pagination';
 import {HmacHttpClient} from '../app/utils/hmac-http-client';
 
-/*
-class ServerObj {
-  constructor(public resource: any) {
-  }
-};
-*/
-
 @Injectable()
 export class ContactService {
 
 constructor(private httpService: Http) {
-// constructor(private httpService: HmacHttpClient) {
   };
 
   findContacts(page: number, pageSize: number, sort: PaginationPropertySort): Rx.Observable<any> {
@@ -48,7 +40,6 @@ constructor(private httpService: Http) {
   };
 
   searchContacts(name: string, page: number, pageSize: number, sort: PaginationPropertySort): Rx.Observable<any> {
-
     const params: any = {size: pageSize, page: page};
     if (sort != null) {
       params.sort = sort.property + ',' + sort.direction;
@@ -94,7 +85,6 @@ constructor(private httpService: Http) {
   };
 
   save(contact: Contact) {
-
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     if (contact.id) {

@@ -1,7 +1,5 @@
 import * as _ from 'lodash';
 
-///<reference path="../../../../../typings/lodash/lodash.d.ts" />
-
 export class SecurityToken {
     publicSecret: string;
     securityLevel: string;

@@ -5,13 +5,12 @@ import {SecurityToken} from '../../models/securityToken';
 import * as AppUtils from './app.utils';
 import {AccountEventsService} from '../../services/account.events.service';
 import {ErrorService} from '../../services/error.service';
+import {LoginService} from '../../services/login.service';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/share';
 import {Observer} from 'rxjs/Observer';
 import * as CryptoJS from 'crypto-js';
-
-///<reference path="../../../../../typings/cryptojs/cryptojs.d.ts" />
 
 @Injectable()
 export class HmacHttpClient extends Http {
@@ -28,7 +27,6 @@ export class HmacHttpClient extends Http {
 
     if (AppUtils.UrlMatcher.matches(url)) {
 
-      // const securityToken: SecurityToken = new SecurityToken(JSON.parse(localStorage.getItem(AppUtils.STORAGE_SECURITY_TOKEN)));
       const securityToken: SecurityToken = new SecurityToken(JSON.parse(this.getFromStorage(AppUtils.STORAGE_SECURITY_TOKEN)));
 
       const date: string = new Date().toISOString();
@@ -41,8 +39,6 @@ export class HmacHttpClient extends Http {
         message = method + url + date;
       }
       options.headers.set(AppUtils.CSRF_CLAIM_HEADER, localStorage.getItem(AppUtils.CSRF_CLAIM_HEADER));
-      // rkc set this as default
-      // options.headers.set(AppUtils.HEADER_X_DIGEST, CryptoJS.HmacSHA256(message, secret).toString());
       if (securityToken.isEncoding('HmacSHA256')) {
         options.headers.set(AppUtils.HEADER_X_DIGEST, CryptoJS.HmacSHA256(message, secret).toString());
       } else if (securityToken.isEncoding('HmacSHA1')) {
@@ -70,10 +66,8 @@ export class HmacHttpClient extends Http {
   }
   mapResponse(res: Response, observer: Observer<Response>): void {
     if (res.ok && res.headers) {
-      // const securityToken: SecurityToken = new SecurityToken(JSON.parse(localStorage.getItem(AppUtils.STORAGE_SECURITY_TOKEN)));
-     const securityToken: SecurityToken = new SecurityToken(JSON.parse(this.getFromStorage(AppUtils.STORAGE_SECURITY_TOKEN)));
+      const securityToken: SecurityToken = new SecurityToken(JSON.parse(this.getFromStorage(AppUtils.STORAGE_SECURITY_TOKEN)));
       if (securityToken) {
-        // localStorage.setItem(AppUtils.STORAGE_SECURITY_TOKEN, JSON.stringify(securityToken));
         this.setToStorage(AppUtils.STORAGE_SECURITY_TOKEN, securityToken);
       }
     }
@@ -84,16 +78,17 @@ export class HmacHttpClient extends Http {
     if (res.status === 401) {
       console.log('Unauthorized request:', res.text());
       this.accountEventsService.logout({error: res.text()});
-      // this.errorService.handleError(res);
       this.errorService.changeMessage('Unauthorized request!');
-      // return Observable.throw('Unauthorized');
     }
 
     if (res.status === 403) {
-      const errorMsg = 'Unauthorized request!' ;
-      console.log(errorMsg  + res.text());
+      let errorMsg = 'Unauthorized request!';
+      console.log(errorMsg + res.text());
       this.accountEventsService.logout({error: res.text()});
-      // this.errorService.handleError(res);
+
+      if (res.text() === 'No jwt cookie found') {
+        errorMsg = errorMsg + ' ' + res.text();
+      }
       alert(errorMsg);
       this.errorService.changeMessage(errorMsg);
     }

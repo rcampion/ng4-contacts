@@ -1,8 +1,6 @@
 import * as _ from 'lodash';
 import { Authority } from './authority';
 
-///<reference path="../../../../../typings/lodash/lodash.d.ts" />
-
 export class Account {
   id: number;
   login: string;

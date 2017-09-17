@@ -9,7 +9,6 @@ import {Authority} from '../models/authority';
 import {Observable} from 'rxjs/Observable';
 import * as AppUtils from '../app/utils/app.utils';
 import {Router} from '@angular/router';
-import {BaseHttpService} from '../services/base-http.service';
 
 @Injectable()
 export class LoginService {

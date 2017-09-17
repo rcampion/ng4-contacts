@@ -1,60 +1,52 @@
-import { Injectable } from '@angular/core';
-import { Http, Response, RequestOptions, Headers, URLSearchParams } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import {Injectable} from '@angular/core';
+import {Http, Response, RequestOptions, Headers, URLSearchParams} from '@angular/http';
+import {Observable} from 'rxjs/Rx';
 import * as Rx from 'rxjs/Rx';
-import { webServiceEndpoint } from '../app/common/constants';
-import { Group } from '../models/group';
-import { PaginationPage, PaginationPropertySort } from '../app/common/pagination';
+import {webServiceEndpoint} from '../app/common/constants';
+import {Group} from '../models/group';
+import {PaginationPage, PaginationPropertySort} from '../app/common/pagination';
 import {HmacHttpClient} from '../app/utils/hmac-http-client';
-
-/*
-class ServerObj {
-  constructor(public resource: any) {
-  }
-};
-*/
 
 @Injectable()
 export class GroupService {
 
   constructor(private httpService: Http) {
-
   };
 
   findGroups(page: number, pageSize: number, sort: PaginationPropertySort): Rx.Observable<any> {
-    const params: any = { page: page, size: pageSize };
+    const params: any = {page: page, size: pageSize};
     if (sort != null) {
       params.sort = sort.property + ',' + sort.direction;
     }
     return <Rx.Observable<PaginationPage<any>>>Rx.Observable.fromPromise(
       this.httpService
-        .get(webServiceEndpoint + '/group', { search: params })
+        .get(webServiceEndpoint + '/group', {search: params})
         .map(res => res.json())
         .toPromise()
     ).publish().refCount();
   };
 
   findGroupMembers(groupId: string, page: number, pageSize: number, sort: PaginationPropertySort): Rx.Observable<any> {
-    const params: any = { page: page, size: pageSize };
+    const params: any = {page: page, size: pageSize};
     if (sort != null) {
       params.sort = sort.property + ',' + sort.direction;
     }
     return <Rx.Observable<PaginationPage<any>>>Rx.Observable.fromPromise(
       this.httpService
-        .get(webServiceEndpoint + '/group/member/' + groupId, { search: params })
+        .get(webServiceEndpoint + '/group/member/' + groupId, {search: params})
         .map(res => res.json())
         .toPromise()
     ).publish().refCount();
   };
 
   searchGroups(name: string, page: number, pageSize: number, sort: PaginationPropertySort): Rx.Observable<any> {
-    const params: any = { size: pageSize, page: page };
+    const params: any = {size: pageSize, page: page};
     if (sort != null) {
       params.sort = sort.property + ',' + sort.direction;
     }
     return <Rx.Observable<PaginationPage<any>>>Rx.Observable.fromPromise(
       this.httpService
-        .get(webServiceEndpoint + '/group/search/' + name, { search: params })
+        .get(webServiceEndpoint + '/group/search/' + name, {search: params})
         .map(res => res.json())
         .toPromise()
     ).publish().refCount();
@@ -62,7 +54,7 @@ export class GroupService {
 
   query(params?: URLSearchParams): Observable<Group[]> {
     return this.httpService
-      .get(webServiceEndpoint, { search: params })
+      .get(webServiceEndpoint, {search: params})
       .map((response) => {
         const result: any = response.json();
         const groups: Array<Group> = [];
@@ -78,25 +70,15 @@ export class GroupService {
         return groups;
       });
   };
-  /*
-    getAll(): Observable<Group[]> {
-      let groups$ = this.http
-        .get(`${this.baseUrl}/group`, { headers: this.getHeaders() })
-        .map(mapGroups)
-        .catch(handleError);
-      return groups$;
-    }
-  */
 
   get(id: number): Observable<Group> {
     const group$ = this.httpService
-      .get(`${webServiceEndpoint}/group/${id}`, { headers: this.getHeaders() })
+      .get(`${webServiceEndpoint}/group/${id}`, {headers: this.getHeaders()})
       .map(mapGroup);
     return group$;
   };
 
   save(group: Group) {
-
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     if (group.groupId) {
@@ -122,18 +104,13 @@ export class GroupService {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const test = webServiceEndpoint + '/group/member/' + groupId + '/' + contactId;
-//    return this.httpService.post(webServiceEndpoint + '/group/member/' + groupId + '/' + contactId,
-//      {
-//        headers: headers
-//      });
-
-      return this.httpService.post(webServiceEndpoint + '/group/member/' + groupId + '/' + contactId,
-        {
-          headers: headers
-        })
-        .map((data) => {
-          return data;
-        });
+    return this.httpService.post(webServiceEndpoint + '/group/member/' + groupId + '/' + contactId,
+      {
+        headers: headers
+      })
+      .map((data) => {
+        return data;
+      });
   }
 
   removeGroup(id: string) {
@@ -183,17 +160,6 @@ function mapGroup(response: Response): Group {
   return toGroup(response.json());
 }
 
-// this could also be a private method of the component class
-function handleError(error: any) {
-  // log error
-  // could be something more sophisticated
-  const errorMsg = error.message || `Yikes! There was was a problem and we couldn't retrieve your data!`;
-  console.error(errorMsg);
-
-  // throw an application level error
-  return Observable.throw(errorMsg);
-}
-
 function
   groupToJson(group: Group) {
   const doc = {
@@ -202,7 +168,6 @@ function
     groupDescription: group.groupDescription
   };
 
-  //    return stringify ? JSON.stringify({ resource: [doc] }) : doc;
   return JSON.stringify(doc);
 }
 

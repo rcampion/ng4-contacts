@@ -15,21 +15,12 @@ import {GroupMemberSelectorComponent} from './group-member-selector/group-member
 import {Users} from './users/users';
 import {User} from './users/user';
 import {ErrorComponent} from './error/error.component';
-// import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {LoginService} from '../services/login.service';
-
-// import {ContactService} from '../services/contacts.service';
-// import {GroupService} from '../services/groups.service';
 import {AccountEventsService} from '../services/account.events.service';
 import {ErrorService} from '../services/error.service';
-
-// import * as AppUtils from './utils/app.utils';
-// import { IsAuthorized } from '../app/utils/is-authorized.directive';
 import {UtilsModule} from '../app/utils/utils.module';
 import {HmacHttpClient} from '../app/utils/hmac-http-client';
-
 import {AppComponent} from './app.component';
-
 import {TablePagination} from './table/table';
 import {TableElementsCount} from './table/table';
 import {TableSort} from './table/table';
